@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>mash pit.</title>
+    <style media="screen">
+      #clicker {
+        background: #000000;
+        border-radius: 10em;
+        width: 10em;
+        height: 10em;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+      }
+      #clicker p {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font-size: 24pt;
+        color: #ffffff
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <input id='name' placeholder="Username, no spaces" type="text" autocomplete="off" style="margin-bottom: 3em">
+      <button href='#'>Join Game</button>
+    </form>
+    <img id='clicker' src="joinIn.png" alt="" />
+
+    <table id='currentGame'>
+      <thead>
+        <tr>
+          <td><b>Name</b></td>
+          <td><b>Score</b></td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" ></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.7.js" ></script>
+    <script type="text/javascript">
+      var socket = io();
+      var gameStatus = false;
+
+      function hasWhiteSpace(s) {
+        return s.indexOf(' ') >= 0;
+      }
+
+      $("#clicker").click(function(){
+        socket.emit('click', $("#name").val());
+      });
+
+      $("form").submit(function(){
+
+        if (!gameStatus) {
+          if ($("name").val() == '') {
+            alert("Please type a username.")
+          } else {
+            if (hasWhiteSpace($("#name").val())) {
+              alert("Please do not use spaces in your username.")
+            } else {
+              socket.emit('new player', $("#name").val());
+              $("#name").attr("disabled", true)
+              console.log(name + " submitted")
+              return false;
+            }
+          }
+        }
+
+      });
+
+      socket.on("playerList", function(list){
+
+        for (var i = 0; i < list.length; i++) {
+          $("<tr>")
+          .append($("<td>").append(list[i].name).attr("name", list[i].name)) // name
+          .append($("<td>").append(list[i].clicks))
+
+          .appendTo($("tbody"))
+        }
+      });
+
+      socket.on('clicker', function(name){
+        console.log(name + " has clicked.")
+        var $cell = $("td[name=" + name + "]").next();
+        $cell.text( parseInt($cell.text()) + 1 )
+      });
+
+      socket.on("newClicker", function(name){
+        $("<tr>")
+        .append($("<td>").append(name).attr("name", name)) // name
+        .append($("<td>").append('0'))
+
+        .appendTo($("tbody"))
+      });
+
+      socket.on("gameStart", function() {
+        $("#name").attr("disabled", true)
+        console.log("gamestart")
+        gameStatus = true;
+        setTimeout(function () {                  //Countdown: 3
+          $("#clicker").attr("src", "countdown3.png");
+          setTimeout(function () {                //Countdown: 2
+            $("#clicker").attr("src", "countdown2.png");
+            setTimeout(function () {              //Countdown: 1
+              $("#clicker").attr("src", "countdown1.png");
+              setTimeout(function () {
+                $("#clicker").attr("src", "clickNow.png");  //Countdown: GO!
+              }, 1000);
+            }, 1000);
+          }, 1000);
+        }, 1000);
+      });
+
+      socket.on("gameEnd", function(playerList){
+        $("#clicker").attr("src", "joinIn.png");
+        gameStatus = false;
+
+        var winner = {"clicks": 0};
+        for (var i = 0; i < playerList.length; i++) {
+          if (playerList[i].clicks > winner.clicks) {
+            winner = playerList[i]
+          }
+        }
+
+        console.log(winner.name)
+
+        $("<td>").append($("<b>").text("Winner!"))
+        .appendTo($("td[name="+ winner.name+"]").parent())
+
+        setTimeout(function () {
+          $("#name").attr("disabled", false);
+          $("tbody tr").remove();
+        }, 10000);
+
+      })
+
+
+    </script>
+  </body>
+</html>
