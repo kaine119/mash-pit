@@ -3,6 +3,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var options = require("./options.json")
+
 app.use(express.static("res"))
 
 app.get("/", function(req, res){
@@ -27,7 +29,7 @@ io.on("connection", function(socket){
     // update other players
     io.emit("newClicker", name)
     // check if 8 players are present
-    if (Object.keys(players).length == 2) {
+    if (Object.keys(players).length == options.numOfPlayers) {
       console.log('The 23rd Hunger Games has begun!');
       io.emit('gameStart');
       setTimeout(function () {
@@ -36,7 +38,7 @@ io.on("connection", function(socket){
           gameStatus = false;
           io.emit("gameEnd", players)
           players = []
-        }, 10000);
+        }, options.gameDuration * 1000);
       }, 3000);
     }
   });
