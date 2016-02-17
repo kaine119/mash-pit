@@ -3,45 +3,32 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <title>mash pit.</title>
-    <style media="screen">
-      #clicker {
-        background: #000000;
-        border-radius: 10em;
-        width: 10em;
-        height: 10em;
-        text-align: center;
-        display: table-cell;
-        vertical-align: middle;
-      }
-      #clicker p {
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        font-size: 24pt;
-        color: #ffffff
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+
   </head>
   <body>
-    <form>
-      <input id='name' placeholder="Username, no spaces" type="text" autocomplete="off" style="margin-bottom: 3em">
-      <button href='#'>Join Game</button>
-    </form>
-    <img id='clicker' src="joinIn.png" alt="" />
+    <div id="formHolder">
+      <form>
+        <input id='name' placeholder="Username, no spaces" type="text" autocomplete="off" >
+        <button href='#'>Join Game</button>
+      </form>
+    </div>
 
-    <table id='currentGame'>
-      <thead>
-        <tr>
-          <td><b>Name</b></td>
-          <td><b>Score</b></td>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div id="gameArea">
+      <img id='clicker' src="joinIn.png" alt="" />
+
+      <table id='currentGame'>
+        <thead>
+          <tr>
+            <td><b>Name</b></td>
+            <td><b>Score</b></td>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
     <script src="https://code.jquery.com/jquery-2.1.4.min.js" ></script>
     <script src="https://cdn.socket.io/socket.io-1.3.7.js" ></script>
@@ -67,6 +54,8 @@
             } else {
               socket.emit('new player', $("#name").val());
               $("#name").attr("disabled", true)
+              $("button").attr("disabled", true)
+              document.querySelector("button").innerHTML = "Joined!"
               console.log(name + " submitted")
               return false;
             }
@@ -133,11 +122,13 @@
         console.log(winner.name)
 
         $("<td>").append($("<b>").text("Winner!"))
-        .appendTo($("td[name="+ winner.name+"]").parent())
-
+        .appendTo($("td[name="+ winner.name+"]").parent());
+        document.querySelector("button").innerHTML = "Game over! Review your scores."
         setTimeout(function () {
           $("#name").attr("disabled", false);
+          $("button").attr("disabled", false)
           $("tbody tr").remove();
+          document.querySelector("button").innerHTML = "Join Game"
         }, 10000);
 
       })

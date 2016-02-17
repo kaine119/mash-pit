@@ -1,0 +1,106 @@
+body {
+	background: #424242;
+	margin: 0;
+	font-family: "Open Sans", sans-serif;
+}
+
+#formHolder {
+	margin-top: 1em;
+	width: 100%;
+}
+
+#name, form > button {
+	display: block;
+	font-size: 18pt;
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+	margin-top: 10px;
+}
+
+#name {
+	-webkit-transition: all 0.30s ease-in-out;
+	   -moz-transition: all 0.30s ease-in-out;
+	    -ms-transition: all 0.30s ease-in-out;
+	     -o-transition: all 0.30s ease-in-out;
+	     	transition: all 0.30s ease-in-out;
+	     	outline: none;
+	     	border: none;
+	/*border: 0px solid white;	*/
+	/*border-bottom-width: 1px;*/
+	background-color: #424242;
+	color: white;
+	text-align: center;
+}
+
+form > button {
+	width: auto;
+}
+
+#name:focus {
+	/*border: none;*/
+	outline: none;
+	box-shadow: 0 0 20px #ffffff;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: white;
+  font-style: italic;
+  font-size: 15pt
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: white;
+  font-style: italic;
+  font-size: 15pt
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: white;
+  font-style: italic;
+  font-size: 15pt
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: white;
+  font-style: italic;
+  font-size: 15pt
+}
+
+
+
+
+#clicker {
+	background: #000000;
+	border-radius: 10em;
+	width: 20em;
+	height: 20em;
+	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5em;
+}
+#clicker p {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	font-size: 24pt;
+	color: #ffffff
+}
+
+#currentGame {
+	position: absolute;
+	display: inline-block;
+	right: 15%;
+	transform: translateY(-20em);
+	color: white;
+}
+
+#currentGame tr td {
+	width: 5em;
+	border-left: 1px solid white;
+	padding-left: 3px;
+}
+
