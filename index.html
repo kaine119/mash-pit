@@ -137,10 +137,9 @@
         var letter = randomLetter();
         $("#clicker").attr("src", "letters/letter" + letter.string + ".png")
         $(document).on("keypress", function(e){
-          console.log("expected: " + letter.keyCode + " pressed: " + e.keyCode)
-          socket.emit("click", $("#name").val())
-          numberOfClicks
           $(document).off("keypress")
+          console.log("expected: " + letter.keyCode + " pressed: " + e.keyCode)
+          socket.emit("click", $("#name").val());
           gameSequence();
           
         })
