@@ -135,19 +135,13 @@
 
       function gameSequence(){
         var letter = randomLetter();
-        var numberOfClicks = 0;
         $("#clicker").attr("src", "letters/letter" + letter.string + ".png")
         $(document).on("keypress", function(e){
           console.log("expected: " + letter.keyCode + " pressed: " + e.keyCode)
-          if (gameStatus && e.keyCode == letter.keyCode && numberOfClicks < 9) {
-            socket.emit("click", $("#name").val())
-            numberOfClicks += 1
-          } else {
-            if (numberOfClicks == 9) {
-              $(document).off("keypress")
-
-              gameSequence();
-            }
+          socket.emit("click", $("#name").val())
+          numberOfClicks
+          $(document).off("keypress")
+          gameSequence();
           }
         })
       }
