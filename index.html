@@ -139,7 +139,9 @@
         $(document).on("keypress", function(e){
           $(document).off("keypress")
           console.log("expected: " + letter.keyCode + " pressed: " + e.keyCode)
-          socket.emit("click", $("#name").val());
+          if (e.keyCode == letter.keyCode) {
+            socket.emit("click", $("#name").val());
+          }
           gameSequence();
           
         })
